@@ -14,7 +14,7 @@ int main()
     if(arr == NULL)
     {
         printf("Memory allocation failed");
-        return 1;
+        exit(0);
     }
 
     for(i = 0; i < n; i++)
