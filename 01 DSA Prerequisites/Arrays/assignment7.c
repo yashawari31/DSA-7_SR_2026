@@ -31,7 +31,7 @@ int main()
      printf("Element not found");
 
    else
-     printf("Element found at position/index %d ",key);
+     printf("Element found at %d position",key+1);
 
     return 0;
 }
@@ -41,7 +41,7 @@ int search(int *arr,int size,int key)
     int left=0;
     int right=size-1;
 
-    while(left<right)
+    while(left<=right)
     {
         if(arr[left]==key)
         {
