@@ -18,7 +18,7 @@ int main()
        scanf("%d",&arr[i]);
 
     printf("The second largest element is: %d",secondLargestNumber(arr,size));  
-    
+    free(arr);
     return 0;
 }
 
