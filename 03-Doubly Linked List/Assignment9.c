@@ -1,6 +1,5 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<stdbool.h>
 
 typedef struct node
 {
@@ -11,19 +10,27 @@ typedef struct node
 
 dll *insert_at_head(dll *head);
 void display(dll *head);
-bool cycleDetect(dll *head);
+dll *delete_key(dll *head,int key);
 
 int main()
 {
    dll *start=NULL;
 
-   start=insert_at_head(start);
-   start=insert_at_head(start);
-   start=insert_at_head(start);
-   
+  int n;
+  printf("Enter number of nodes to insert from head:\n");
+  scanf("%d",&n);
+  for(int i=0;i<n;i++)
+  {
+    start=insert_at_head(start);
+  }
 
    display(start);
 
+   int key;
+   printf("\nEnter the element to delete: ");
+   scanf("%d",&key);
+   start=delete_key(start,key);
+   display(start);
    dll *temp;
    while(start!=NULL)
    {
@@ -78,24 +85,39 @@ void display(dll *head)
     }
 }
 
-bool cycleDetect(dll *head)
+dll *delete_key(dll *head,int key)
 {
     if(head==NULL)
     {
         printf("Empty List\n");
-        return false;
+        return head;
     }
-    dll *slow=head;
-    dll *fast=head;
-
-    while(fast->next!=NULL && fast!=NULL)
+    if(head->data==key)
     {
-        slow=slow->next;
-        fast=fast->next->next;
-        if(slow==fast)
-        {
-            return true;
-        }
+        printf("Key found and deleted!\n");
+        dll *temp=head;
+       head=head->next;
+        free(temp);
+
+       return head;
     }
-    return false;
+    dll *temp=head;
+    while(temp!=NULL)
+    {
+        if(temp->data==key)
+        {
+            printf("Key found and deleted!\n");
+            temp->prev->next=temp->next;
+            if(temp->next!=NULL)
+            {
+                temp->next->prev=temp->prev;
+            }
+            free(temp);
+            return head;
+            
+        }
+        temp=temp->next;
+    }
+    printf("Element not found!");
+    return head;
 }
