@@ -13,7 +13,6 @@ dll  *delete_at_head(dll *head);
 void insert_after(dll *head,int key);
 dll *insert_before(dll *head,int key);
 dll *delete_before(dll *head,int key);
-void delete_after(dll *head,int key);
 void display(dll *head);
 
 int main()
@@ -27,8 +26,8 @@ int main()
 
    display(start);
 
-   printf("data after deleting a node after a key element:\n");
-   delete_after(start,19);
+   printf("data after deleting a node before a key element:\n");
+   start=delete_before(start,19);
    display(start);
 
    start=insert_before(start,19);
@@ -231,40 +230,4 @@ dll *delete_before(dll *head,int key)
     printf("Data not found to delete\n");
     return head;
 
-}
-
-void delete_after(dll *head,int key)
-{
-    if(head==NULL)
-    {
-        printf("Empty List!");
-        return;
-    }
-    dll *temp=head;
-    while(temp!=NULL)
-    {
-        if(temp->data==key)
-        {
-            if(temp->next!=NULL)
-            {
-                dll *del=temp->next;
-                temp->next=del->next;
-                if(del->next!=NULL)
-                {
-                    del->next->prev=temp;
-                }
-                free(del);
-                printf("Data after %d removed from list!\n",key);
-                return;
-            }
-            else
-            {
-                printf("No node to delete after key element\n");
-                return;
-            }
-        }
-        temp=temp->next;
-    }
-    printf("Data not found to delete\n");
-    return;
 }
