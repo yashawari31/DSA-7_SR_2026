@@ -1,47 +1,68 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef struct node
 {
     int data;
     struct node *next;
-}csll;
+} csll;
 
-csll* create_list(csll *start);
-void display(csll *start);
+// Function declarations
+csll *create_list(csll *last);
 void insert_at_beginning(csll *last,int data);
-csll *insert_at_last(csll *last,int data);
 void delete_at_beginning(csll *last);
-csll *delete_key(csll *last,int key);
+void display(csll *last);
 
 int main()
 {
-    csll *last;
+    csll *last = NULL;
+    int choice;
 
-    last=create_list(last);
-
-    printf("the data in csll is:\n");
-    display(last->next);
-
-    insert_at_beginning(last,10);
-    insert_at_beginning(last,20);
-    last=insert_at_last(last,90);
-    printf("the data in csll is:\n");
-    display(last->next);
-
-    last=delete_key(last,20);
-    printf("the data in csll is:\n");
-    display(last->next);
-
-    csll *temp=last->next;
-    while(temp!=last)
+    do
     {
-        csll *del=temp;
-        temp=temp->next;
-        free(del);
-    }
-   free(last);
-   last=NULL;
+        printf("\n===== CIRCULAR SINGLY LINKED LIST =====\n");
+        printf("1. Create\n");
+        printf("2. Insert\n");
+        printf("3. Delete\n");
+        printf("4. Display\n");
+        printf("5. Exit\n");
+
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch(choice)
+        {
+            case 1:
+                last = create_list(last);
+                break;
+
+            case 2:
+            {
+                int data;
+                printf("Enter data to enter: ");
+                scanf("%d",&data);
+                insert_at_beginning(last,data);
+                break;
+            }
+
+            case 3:
+                delete_at_beginning(last);
+                break;
+
+            case 4:
+                display(last->next);
+                break;
+
+            case 5:
+                printf("Exiting...\n");
+                break;
+
+            default:
+                printf("Invalid choice\n");
+        }
+
+    } while(choice != 5);
+
     return 0;
 }
 
@@ -157,38 +178,20 @@ void delete_at_beginning(csll *last)
     free(temp);
 }
 
-csll *delete_key(csll *last,int key)
+csll *delete_at_last(csll *last)
 {
     if(last == NULL)
     {
         printf("List is empty\n");
         return;
     }
-    csll *head=last->next;
-    if(head->data==key)
-    {
-        last->next=head->next;
-        free(head);
-        return last;
-    }
     csll *temp=last->next;
     while(temp->next!=last)
     {
-        if(temp->next->data==key)
-        {
-            temp->next=temp->next->next;
-            free(temp->next);
-            return last;
-        }
         temp=temp->next;
     }
-    if(temp->next==last && last->data==key)
-    {
-        temp->next=last->next;
-        free(last);
-        return temp;
-    }
-    printf("Key Not Found\n");
-    return last;
-    
+    temp->next=last->next;
+    free(last);
+
+    return temp;
 }
