@@ -11,8 +11,8 @@ typedef struct node
 cdll *create_list(cdll *last);
 void display(cdll *head);
 void destroy_list(cdll *last);
-cdll *insert_at_last(cdll *last,int data);
-void delete_at_beginning(cdll *last);
+void insert_at_beginning(cdll *last,int data);
+cdll *insert_at_position(cdll *last,int pos);
 
 int main()
 {
@@ -21,11 +21,11 @@ int main()
     last=create_list(last);
     display(last->next);
 
-   last=insert_at_last(last,55);
-   display(last->next);
+    insert_at_beginning(last,25);
+    display(last->next);
 
-   delete_at_beginning(last);
-   display(last->next);
+    last=insert_at_position(last,5);
+    display(last->next);
 
     destroy_list(last);
     last=NULL;
@@ -83,7 +83,6 @@ void display(cdll *head)
         }
         temp=temp->next;
     } while (temp!=head);
-    
     printf("\n");
 }
 
@@ -102,19 +101,19 @@ void destroy_list(cdll *last)
 
 }
 
-cdll *insert_at_last(cdll *last,int data)
+void insert_at_beginning(cdll *last,int data)
 {
     if(last==NULL)
     {
         printf("Empty List!\n");
-        return NULL;
+        return;
     }
     
     cdll *nw=malloc(sizeof(cdll));
     if(nw==NULL)
     {
       printf("Memory Allocation Failed!\n");
-      return NULL;
+      return;
     }
     nw->data=data;
     nw->next=last->next;
@@ -122,19 +121,61 @@ cdll *insert_at_last(cdll *last,int data)
     last->next=nw;
     nw->prev=last;
 
-    last=nw;
-    return nw;
 }
 
-void delete_at_beginning(cdll *last)
+cdll *insert_at_position(cdll *last,int pos)
 {
     if(last==NULL)
     {
         printf("Empty List!\n");
-        return;
+        return NULL;
     }
-    cdll *head=last->next;
-    last->next=head->next;
-    head->next->prev=last;
-    free(head);
+    if(pos<1)
+    {
+        printf("Invalid Position!\n");
+        return last;
+    }
+    cdll *temp=last->next;
+    int i=1;
+    while(temp!=last)
+    {
+       if(i==pos)
+       {
+           cdll *nw=malloc(sizeof(cdll));
+           if(nw==NULL)
+          {
+            printf("Memory Allocation Failed!\n");
+            return;
+          }
+          printf("Enter data to insert: ");
+          scanf("%d",&nw->data);
+          nw->next=temp;
+          nw->prev=temp->prev;
+          temp->prev->next=nw;
+          temp->prev=nw;
+          return last;
+       }
+       i++;
+       temp=temp->next;
+    }
+    if(i==pos)
+       {
+           cdll *nw=malloc(sizeof(cdll));
+           if(nw==NULL)
+          {
+            printf("Memory Allocation Failed!\n");
+            return;
+          }
+          printf("Enter data to insert: ");
+          scanf("%d",&nw->data);
+          nw->next=last;
+          last->prev->next=nw;
+          nw->prev=last->prev;
+          last->prev=nw;
+          return last;
+       }
+
+       printf("Position does not exist!\n");
+       return last;
+
 }

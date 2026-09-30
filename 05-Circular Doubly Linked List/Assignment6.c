@@ -11,8 +11,8 @@ typedef struct node
 cdll *create_list(cdll *last);
 void display(cdll *head);
 void destroy_list(cdll *last);
-cdll *insert_at_last(cdll *last,int data);
-void delete_at_beginning(cdll *last);
+void insert_at_beginning(cdll *last,int data);
+cdll *delete_key(cdll *last,int key);
 
 int main()
 {
@@ -21,11 +21,11 @@ int main()
     last=create_list(last);
     display(last->next);
 
-   last=insert_at_last(last,55);
-   display(last->next);
+    insert_at_beginning(last,25);
+    display(last->next);
 
-   delete_at_beginning(last);
-   display(last->next);
+    last=delete_key(last,38);
+    display(last->next);
 
     destroy_list(last);
     last=NULL;
@@ -83,7 +83,6 @@ void display(cdll *head)
         }
         temp=temp->next;
     } while (temp!=head);
-    
     printf("\n");
 }
 
@@ -102,19 +101,19 @@ void destroy_list(cdll *last)
 
 }
 
-cdll *insert_at_last(cdll *last,int data)
+void insert_at_beginning(cdll *last,int data)
 {
     if(last==NULL)
     {
         printf("Empty List!\n");
-        return NULL;
+        return;
     }
     
     cdll *nw=malloc(sizeof(cdll));
     if(nw==NULL)
     {
       printf("Memory Allocation Failed!\n");
-      return NULL;
+      return;
     }
     nw->data=data;
     nw->next=last->next;
@@ -122,19 +121,40 @@ cdll *insert_at_last(cdll *last,int data)
     last->next=nw;
     nw->prev=last;
 
-    last=nw;
-    return nw;
 }
 
-void delete_at_beginning(cdll *last)
+cdll *delete_key(cdll *last,int key)
 {
     if(last==NULL)
     {
         printf("Empty List!\n");
         return;
     }
-    cdll *head=last->next;
-    last->next=head->next;
-    head->next->prev=last;
-    free(head);
+    if(last->data==key)
+    {
+        cdll *del=last;
+        last=last->prev;
+        last->next=del->next;
+        del->next->prev=last;
+        free(del);
+        return last;
+
+    }
+    cdll *temp=last->next;
+    while(temp!=last)
+    {
+        if(temp->data==key)
+        {
+            cdll *del=temp;
+            temp=temp->prev;
+            temp->next=del->next;
+            del->next->prev=temp;
+            free(del);
+            return last;
+        }
+        temp=temp->prev;
+    }
+
+    printf("Key not found!\n");
+    return last;
 }
