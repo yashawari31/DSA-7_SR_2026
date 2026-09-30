@@ -11,6 +11,7 @@ typedef struct node
 cdll *create_list(cdll *last);
 void display(cdll *head);
 void destroy_list(cdll *last);
+cdll *insert_at_last(cdll *last,int data);
 
 int main()
 {
@@ -19,9 +20,11 @@ int main()
     last=create_list(last);
     display(last->next);
 
+   last=insert_at_last(last,55);
+   display(last->next);
+
     destroy_list(last);
     last=NULL;
-    display(last);
 
     return 0;
 }
@@ -77,6 +80,7 @@ void display(cdll *head)
         temp=temp->next;
     } while (temp!=head);
     
+    printf("\n");
 }
 
 void destroy_list(cdll *last)
@@ -92,4 +96,28 @@ void destroy_list(cdll *last)
     free(last);
     
 
+}
+
+cdll *insert_at_last(cdll *last,int data)
+{
+    if(last==NULL)
+    {
+        printf("Empty List!\n");
+        return NULL;
+    }
+    
+    cdll *nw=malloc(sizeof(cdll));
+    if(nw==NULL)
+    {
+      printf("Memory Allocation Failed!\n");
+      return NULL;
+    }
+    nw->data=data;
+    nw->next=last->next;
+    last->next->prev=nw;
+    last->next=nw;
+    nw->prev=last;
+
+    last=nw;
+    return nw;
 }
